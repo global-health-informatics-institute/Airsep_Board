@@ -10,7 +10,7 @@
 // 'C' source line config statements
 
 // FDEVOPT
-#define SYSTEM_FREQUENCY  72000000L
+//#define SYSTEM_FREQUENCY  72000000L
 #pragma config SOSCHP = OFF             // Secondary Oscillator High Power Enable bit (SOSC oprerates in normal power mode.)
 #pragma config USERID = 0xFFFF          // User ID bits (Enter Hexadecimal value)
 
@@ -29,7 +29,7 @@
 #pragma config WINDIS = OFF             // Windowed Watchdog Timer Disable bit (Watchdog timer is in non-window mode)
 #pragma config RWDTPS = PS1048576       // Run Mode Watchdog Timer Postscale Selection bits (1:1048576)
 #pragma config RCLKSEL = LPRC           // Run Mode Watchdog Timer Clock Source Selection bits (Clock source is LPRC (same as for sleep mode))
-#pragma config FWDTEN = ON              // Watchdog Timer Enable bit (WDT is enabled)
+#pragma config FWDTEN = OFF              // Watchdog Timer Enable bit (WDT is enabled)
 
 // FOSCSEL
 #pragma config FNOSC = LPRC             // Oscillator Selection bits (Low power RC oscillator (LPRC))
@@ -46,6 +46,7 @@
 
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
@@ -55,52 +56,51 @@
  * 
  */
 
-
 void right_feed_valve_off() {
-    LATBbits.LATB14 = 0;
-}
-
-void right_feed_valve_on() {
-    LATBbits.LATB14 = 1;
-}
-
-void right_waste_valve_off() {
-    LATBbits.LATB13 = 0;
-}
-
-void right_waste_valve_on() {
-    LATBbits.LATB13 = 1;
-}
-
-void equalizer_valve_off() {
     LATBbits.LATB3 = 0;
 }
 
-void equalizer_valve_on() {
+void right_feed_valve_on() {
     LATBbits.LATB3 = 1;
 }
 
-void left_feed_valve_off() {
-    LATBbits.LATB15 = 0;
-}
-
-void left_feed_valve_on() {
-    LATBbits.LATB15 = 1;
-}
-
-void left_waste_valve_off() {
+void right_waste_valve_off() {
     LATBbits.LATB2 = 0;
 }
 
-void left_waste_valve_on() {
+void right_waste_valve_on() {
     LATBbits.LATB2 = 1;
 }
 
+void equalizer_valve_off() {
+    LATBbits.LATB13 = 0;
+}
+
+void equalizer_valve_on() {
+    LATBbits.LATB13 = 1;
+}
+
+void left_feed_valve_off() {
+    LATBbits.LATB14 = 0;
+}
+
+void left_feed_valve_on() {
+    LATBbits.LATB14 = 1;
+}
+
+void left_waste_valve_off() {
+    LATBbits.LATB15 = 0;
+}
+
+void left_waste_valve_on() {
+    LATBbits.LATB15 = 1;
+}
+
 void set_output_pins(){
-    ANSELBbits.ANSB2 = 0;// RB2 is digital
-    TRISBbits.TRISB2 = 0;// RB2 is output 
-    ANSELBbits.ANSB3 = 0;// RB3 is digital
-    TRISBbits.TRISB3 = 0;// RB3 is output 
+    ANSELBbits.ANSB3 = 0;// RB2 is digital
+    TRISBbits.TRISB3 = 0;// RB2 is output 
+    ANSELBbits.ANSB2 = 0;// RB3 is digital
+    TRISBbits.TRISB2 = 0;// RB3 is output 
     ANSELBbits.ANSB15 = 0;// RB15 is digital
     TRISBbits.TRISB15 = 0;// RB15 is output 
     ANSELBbits.ANSB13 = 0;// RB13 is digital
@@ -115,7 +115,8 @@ void initializing_state(){
     left_waste_valve_on();
     right_feed_valve_on();
     right_waste_valve_on();
-    delayMs(4000);
+    delay(4000);
+    
 }
 
 void running_state(){
@@ -125,7 +126,7 @@ void running_state(){
         left_waste_valve_off();
         right_feed_valve_off();
         right_waste_valve_on();
-        delayMs(9000);
+        delay(6000);
         
         //Case Two
         equalizer_valve_on();
@@ -133,7 +134,7 @@ void running_state(){
         left_waste_valve_off();
         right_feed_valve_off();
         right_waste_valve_off();
-        delayMs(1000);
+        delay(1400);
         
         //Case Three
         equalizer_valve_on();
@@ -141,7 +142,7 @@ void running_state(){
         left_waste_valve_off();
         right_feed_valve_on();
         right_waste_valve_off();
-        delayMs(1000);
+        delay(1400);
         
         //Case Four
         equalizer_valve_off();
@@ -149,7 +150,7 @@ void running_state(){
         left_waste_valve_on();
         right_feed_valve_on();
         right_waste_valve_off();
-        delayMs(9000);
+        delay(6000);
         
         //Case Five
         equalizer_valve_on();
@@ -157,7 +158,7 @@ void running_state(){
         left_waste_valve_off();
         right_feed_valve_on();
         right_waste_valve_off();
-        delayMs(1000);
+        delay(1400);
         
         //Case Six
         equalizer_valve_on();
@@ -165,12 +166,20 @@ void running_state(){
         left_waste_valve_off();
         right_feed_valve_off();
         right_waste_valve_off();
-        delayMs(1000);
+        delay(1400);
 }
 
+void delay(long ms_Delay) {
+    long i , j, k;
+    for (j = 0; j < ms_Delay; j++)
+        for (i = 0; i < 1; i++);
+            for (k = 0; k < 2000; k++);
+}
+
+/*
 #define USHORT unsigned short  
   
-void delayMs(USHORT milisec) {  
+void delay (USHORT milisec) {  
     USHORT newtime;
     newtime = milisec *2;
     T1CON = 0x8010;  
@@ -185,23 +194,21 @@ void delayMs(USHORT milisec) {
     }  
     T1CON = 0x00;  
     return;  
-}
+}*/
+
 
 int main() {
+    
     set_output_pins();
-    
+       
     int run_once = 0;
-    
-    if (run_once == 0);{
+    if (run_once == 0 );{
         initializing_state();
-        }
-    
+        } 
     run_once = 1;
-
+    
     while (1) {
-        
         running_state();
-        
     }
     
     return 0;
