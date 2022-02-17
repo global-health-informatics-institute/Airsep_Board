@@ -1,0 +1,13 @@
+G04 Gerber job file.*
+%TF.FileFunction,JobInfo*%
+%TF.GenerationSoftware,Autodesk,EAGLE,9.1.2*%
+%TF.CreationDate,2019-01-09T08:49:19Z*%
+%TF.Part,Single*%
+%MOMM*%
+%TJ.B_Owner,Mwabi Lungu <mwabilungu@gmail.com>*%
+%TJ.B_ID,Relaya_the second*%
+%TJ.B_LayerNum,2*%
+%TJ.B_Thickness,1.570000*%
+%TJ.B_Size_X,134.600000*%
+%TJ.B_Size_Y,73.330000*%
+M02*
